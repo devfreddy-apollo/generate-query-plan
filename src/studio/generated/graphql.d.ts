@@ -14749,7 +14749,7 @@ export type SupergraphForGraphRefQuery = {
         __typename?: 'InvalidRefFormat';
     } | null;
 };
-export declare const SupergraphForGraphRefDocument: import("graphql/language/ast").DocumentNode;
+export declare const SupergraphForGraphRefDocument: import("graphql").DocumentNode;
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?: Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 export declare function getSdk(client: GraphQLClient, withWrapper?: SdkFunctionWrapper): {
     SupergraphForGraphRef(variables: SupergraphForGraphRefQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SupergraphForGraphRefQuery>;

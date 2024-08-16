@@ -11,5 +11,8 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["generated/*.ts"]
+  "include": [
+    "generated/*.ts",
+    "queryPlanToMermaid/*.ts"
+  ]
 }

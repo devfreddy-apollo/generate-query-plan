@@ -7,17 +7,20 @@
   "type": "module",
   "dependencies": {
     "@apollo/gateway": "^2.7.8",
+    "@apollo/query-graphs": "^2.8.4",
     "clipanion": "^3.2.0-rc.13",
     "graphql": "^16.8.1",
     "graphql-request": "^4.3.0",
     "graphql-tag": "^2.12.6",
-    "make-fetch-happen": "^10.2.1"
+    "make-fetch-happen": "^10.2.1",
+    "pako": "^2.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.1",
     "@graphql-codegen/typescript": "^2.8.8",
     "@graphql-codegen/typescript-graphql-request": "^4.5.9",
     "@graphql-codegen/typescript-operations": "^2.5.13",
+    "@types/pako": "^2",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3"
   },

@@ -8,6 +8,11 @@ import { parse } from "graphql";
 import { readFile } from "fs/promises";
 import { GraphQLClient } from "graphql-request";
 import { getSdk } from "../studio/graphql.js";
+import { queryPlanToMermaid } from "../studio/queryPlanToMermaid/queryPlanToMermaid.js";
+import {
+  queryPlanToMermaidInk,
+  queryPlanToKroki,
+} from "../studio/queryPlanToMermaid/imageUrlService.js";
 
 export class DefaultCommand extends Command {
   supergraph = Option.String("--supergraph");
@@ -21,6 +26,8 @@ export class DefaultCommand extends Command {
   sudo = Option.Boolean("--sudo");
 
   skipLog = Option.Boolean("--skipLog");
+
+  mermaid = Option.String("--mermaid");
 
   async execute() {
     if (this.supergraph && this.graphref) {
@@ -54,6 +61,41 @@ export class DefaultCommand extends Command {
     } else {
       this.context.stdout.write(JSON.stringify(queryPlan, null, 2));
       this.context.stdout.write("\n");
+    }
+
+    if (this.mermaid) {
+      const safeQueryPlan = queryPlan ? (queryPlan) : undefined;
+      // @ts-ignore
+      const mermaidPlanNodeString = queryPlanToMermaid(safeQueryPlan);
+
+      const warning = `
+        --- Warning: This URL is not associated with Apollo GraphQL, visit at your own discretion. ---
+        --- Visiting this link will pass the encoded mermaid textual representation of the query plan, base64 encoded, to the url below. ---
+      `;
+
+      switch (this.mermaid) {
+        case "mermaidink":
+          this.context.stdout.write("To view a generated image of your query plan visit: \n");
+          this.context.stdout.write("    - " + queryPlanToMermaidInk(mermaidPlanNodeString));
+          this.context.stdout.write(warning);
+          break;
+        case "kroki":
+          this.context.stdout.write("To view a generated image of your query plan visit: \n");
+          this.context.stdout.write("    - " + queryPlanToKroki(mermaidPlanNodeString));
+          this.context.stdout.write(warning);
+          break;
+        case 'mmd':
+          this.context.stdout.write("Mermaid Markdown:");
+          this.context.stdout.write(mermaidPlanNodeString);
+          break;
+        default:
+          this.context.stdout.write(`
+            Error: --mermaid flag set incorrectly. Please pass in one of the following options:
+            - "--mermaid mmd" for Mermaid Markdown
+            - "--mermaid mermaidink" for a link to an image of your query plan on https://mermaid.ink
+            - "--mermaid kroki" for a link to an image of your query plan on https://kroki.io
+          `);
+      }
     }
   }
 }
